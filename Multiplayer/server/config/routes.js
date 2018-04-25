@@ -1,15 +1,23 @@
 var path = require('path');
-var pets = require('../controllers/user.js')
+var users = require('../controllers/user.js')
 
-module.exports = function(app){  //exporting routes
+module.exports = function (app) {  //exporting routes
 
-    app.post('/api/users', function(req, res){  //create user route
+    app.get('/api/active/:id', function(req,res){
+        console.log("at routes for checkID");
+        users.check(req, res)
+    })
+
+    app.post('/api/users', function (req, res) {  //create user route
         console.log("at routes for create user")
-        pets.create(req, res)
-    })  
-    // app.get('/api/users', function(req, res){  //get all users route
-    //     pets.getAll(res, res)
-    // })
+        users.create(req, res)
+    })
+    app.get('/api/users', function (req, res) {  //get all users with sorted names route
+        users.getUsers(req, res)
+    })
+    app.get('/api/users/scores', function (req, res) {  //get all users with sorted scores route
+        users.getScores(req, res)
+    })
     // app.delete('/api/users/:id', function(req, res){  //delete user
     //     pets.deleteUser(req, res)
     // })
@@ -20,7 +28,7 @@ module.exports = function(app){  //exporting routes
     //     console.log("at the routes for update")
     //     pets.updateUser(req, res)
     // })
-    app.all("*", (req,res,next) => {
+    app.all("*", (req, res, next) => {
         res.sendFile(path.resolve("./public/dist/index.html"))  //route for exceptions
-      });
+    });
 }
